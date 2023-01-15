@@ -1,0 +1,72 @@
+{
+  "start": {
+    "id": "start",
+    "type": "start",
+    "next": "getHTTPRSP"
+  },
+  "end": {
+    "id": "end",
+    "type": "end"
+  },
+  "getHTTPRSP": {
+    "id": "getHTTPRSP",
+    "type": "task",
+    "next": "ytbDownlaod",
+    "task": {
+      "id": "getHTTPRSP",
+      "task_type": "HttpRequest",
+      "method": "GET",
+      "content_type": "json",
+      "path": "http://www.weather.com.cn/data/cityinfo/101190408.html",
+      "request":{
+        ".post.hello": {
+          "data": "hhhhh",
+          "type": "string",
+          "action": "data"
+        }
+      }
+    }
+  },
+  "ytbDownlaod": {
+    "id": "ytbDownlaod",
+    "type": "task",
+    "next": "databuilder",
+    "task": {
+      "id": "ytbDownlaod",
+      "task_type": "YtbDownloader",
+      "request":{
+        ".is_playlist": {
+          "data": "__REQUEST__.playlist",
+          "type": "bool",
+          "action": "expr"
+        },
+        ".format": {
+          "data": "__REQUEST__.format",
+          "type": "string",
+          "action": "expr"
+        },
+        ".url": {
+          "data": "__REQUEST__.url",
+          "type": "string",
+          "action": "expr"
+        }
+      }
+    }
+  },
+  "databuilder": {
+    "id": "databuilder",
+    "type": "task",
+    "next": "end",
+    "task": {
+      "id": "databuilder",
+      "task_type": "DataBuilder",
+      "method": "GET",
+      "response": {
+        ".weatherinfo": {
+          "data": "__getHTTPRSP:RSP__.weatherinfo",
+          "action": "expr"
+        }
+      }
+    }
+  }
+}
